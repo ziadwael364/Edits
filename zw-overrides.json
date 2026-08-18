@@ -1,0 +1,133 @@
+{
+  "text": {
+    "heroHeadline": "I Turn Raw Footage Into Content People <span class=\"accent\">Actually Watch.</span>",
+    "heroSub": "High-retention video editing for creators and businesses that want better content, stronger storytelling, and more attention.",
+    "aboutHeadline": "I'm Ziad Wael.",
+    "aboutBio": "I help creators and businesses turn raw footage into content that communicates clearly, feels intentional, and keeps viewers watching. <strong>My work spans marketing explainers, healthcare and personal-brand content, and fully animated motion pieces</strong> — whatever the platform demands, the goal is the same: hold attention and earn the next second.",
+    "factExperience": "1+ year editing",
+    "factContentTypes": "Short-form, long-form, motion graphics",
+    "factIndustries": "Business, healthcare, personal brand"
+  },
+  "hero": {
+    "video": "videos/m1-1787051596753.mp4",
+    "poster": "posters/m1-1787051596754.jpg",
+    "views": "142K",
+    "duration": "0:35"
+  },
+  "projects": [
+    {
+      "id": "m1",
+      "cat": "Sponsored Ad · Instagram",
+      "title": "The Zest Agency",
+      "duration": "0:35",
+      "views": "142K",
+      "overview": "A paid Instagram ad, not an organic post — built with kinetic type and a confident visual rhythm to earn a stop mid-scroll.",
+      "goal": "Make a sponsored ad that doesn't feel like one, and drive real inbound inquiries.",
+      "approach": "Fast rhythmic cuts, bold type call-outs, and a restrained palette broken by one red accent for silent-autoplay legibility.",
+      "result": "142K views and a wave of DMs asking about pricing and packages — the ad worked.",
+      "desc": "Paid Instagram ad that drove real DMs.",
+      "tags": [
+        "Paid Ad",
+        "Motion Graphics",
+        "Business"
+      ],
+      "poster": "posters/m1-1787051596754.jpg",
+      "video": "videos/m1-1787051596753.mp4"
+    },
+    {
+      "id": "m2",
+      "cat": "Personal Brand · Healthcare",
+      "title": "Dr. Ahmed — Dermatology & Cosmetics",
+      "duration": "0:46",
+      "views": "89K*",
+      "overview": "A direct-to-camera piece helping a dermatology and laser specialist earn trust before a patient ever books.",
+      "goal": "Turn expertise into approachable, caption-led content that makes the doctor the obvious choice.",
+      "approach": "Clean punch-ins on a single-take talking head, timed caption call-outs, and a soft grade matched to the real clinic.",
+      "result": "An estimated ~89K views for a specialty that lives on trust — reach that converts to bookings.",
+      "desc": "Talking-head content built to earn patient trust.",
+      "tags": [
+        "Personal Brand",
+        "Short Form",
+        "Healthcare"
+      ],
+      "poster": "posters/m2-1787051596754.jpg",
+      "video": "videos/m2-1787051596754.mp4"
+    },
+    {
+      "id": "m3",
+      "cat": "Motion & Visuals · Social Media",
+      "title": "What The World Chases",
+      "duration": "0:50",
+      "views": "216K*",
+      "overview": "A fully animated kinetic-typography piece pairing 3D elements with hand-built motion type.",
+      "goal": "Show range beyond talking-head editing — 3D, motion, and sound design as one standalone piece.",
+      "approach": "Custom 3D renders choreographed to a rising voiceover, warm marble backdrops, and frame-by-frame type animation.",
+      "result": "An estimated ~216K views — production value that travels well past one platform.",
+      "desc": "3D elements and kinetic type, frame by frame.",
+      "tags": [
+        "Motion Graphics",
+        "VFX",
+        "Kinetic Typography"
+      ],
+      "poster": "posters/m3-1787051596755.jpg",
+      "video": "videos/m3-1787051596754.mp4"
+    },
+    {
+      "id": "m4",
+      "cat": "Personal Brand · Motion Graphics",
+      "title": "Script Framework",
+      "duration": "0:19",
+      "views": "64K*",
+      "overview": "A self-promo reel offering a free script framework — the hook, the offer, and the payoff in under 20 seconds.",
+      "goal": "Turn a scroll-stopping hook into saves, follows, and DM requests for the framework.",
+      "approach": "Clapperboard motifs, paper-prop stop motion, and tight kinetic type keep the pace brisk and premium.",
+      "result": "An estimated ~64K views — solid reach for a pure lead-magnet format.",
+      "desc": "A self-promo hook built to earn saves and follows.",
+      "tags": [
+        "Motion Graphics",
+        "Personal Brand",
+        "Hook Writing"
+      ],
+      "poster": "posters/m4-1787051596755.jpg",
+      "video": "videos/m4-1787051596755.mp4"
+    },
+    {
+      "id": "m5",
+      "cat": "Business · Storytelling",
+      "title": "The Nvidia Story",
+      "duration": "0:39",
+      "views": "184K*",
+      "overview": "A gallery-style explainer on Nvidia's rise from a gaming-chip company to a $140B giant.",
+      "goal": "Make a dense business story easy to follow and satisfying to finish.",
+      "approach": "An animated gallery-wall motif, bold caption typography, and pacing that matches each new fact beat.",
+      "result": "An estimated ~184K views — business storytelling that holds attention to the end.",
+      "desc": "A gallery-style explainer on a $140B rise.",
+      "tags": [
+        "Business",
+        "Motion Graphics",
+        "Educational"
+      ],
+      "poster": "posters/m5-1787051596756.jpg",
+      "video": "videos/m5-1787051596756.mp4"
+    },
+    {
+      "id": "m6",
+      "cat": "Motion & Visuals · Personal Brand",
+      "title": "Why Brands Stick",
+      "duration": "0:14",
+      "views": "127K*",
+      "overview": "A quick kinetic-type piece on why certain brands stay memorable — motion design as the answer.",
+      "goal": "Make the case for motion design itself, fast enough to hold on a first watch.",
+      "approach": "Bold brand callouts, a clean type-driven mid-section, and a playful closing visual metaphor.",
+      "result": "An estimated ~127K views — proof a 14-second idea can still land.",
+      "desc": "Kinetic type on what makes branding memorable.",
+      "tags": [
+        "Motion Graphics",
+        "Branding",
+        "Kinetic Typography"
+      ],
+      "poster": "posters/m6-1787051596756.jpg",
+      "video": "videos/m6-1787051596756.mp4"
+    }
+  ]
+}
