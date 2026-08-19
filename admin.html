@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Ziad Wael</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0b09; --ink-raised:#161310; --ink-raised-2:#1e1a15;
+  --ink-line:rgba(243,238,227,0.09); --ink-line-strong:rgba(243,238,227,0.16);
+  --paper:#f3eee3; --paper-dim:rgba(243,238,227,0.72);
+  --smoke:#8d8577; --smoke-dim:#5f594e;
+  --ember:#e4a034; --ember-bright:#f2b656; --rust:#b5502c;
+  --ember-dim:rgba(228,160,52,0.14); --ember-line:rgba(228,160,52,0.35);
+  --red:#d1503a; --red-dim:rgba(209,80,58,0.14);
+  --shadow-soft:0 20px 60px rgba(0,0,0,0.45);
+  --radius-s:6px; --radius-m:14px; --radius-l:22px;
+  --ease:cubic-bezier(.16,.8,.24,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Big Shoulders Display',sans-serif;font-weight:800;letter-spacing:-0.01em;color:var(--paper);line-height:1;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--smoke);display:flex;align-items:center;gap:9px;}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ember);box-shadow:0 0 0 3px var(--ember-dim);}
+
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:14px;border:none;transition:transform 0.25s var(--ease),background 0.25s,border-color 0.25s;}
+.btn-primary{background:linear-gradient(135deg,var(--ember-bright),var(--ember) 60%,var(--rust));color:#141110;}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{background:transparent;border:1px solid var(--ink-line-strong);color:var(--paper);}
+.btn-ghost:hover{border-color:var(--ember-line);background:var(--ember-dim);}
+.btn-danger{background:var(--red-dim);border:1px solid rgba(209,80,58,0.4);color:#f0b3a5;}
+.btn-danger:hover{background:rgba(209,80,58,0.24);}
+.btn-sm{padding:8px 16px;font-size:13px;}
+.btn:disabled{opacity:0.45;cursor:not-allowed;transform:none !important;}
+
+/* ---------- LOGIN ---------- */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;z-index:1;}
+.login-card{width:100%;max-width:400px;background:var(--ink-raised);border:1px solid var(--ink-line-strong);border-radius:var(--radius-l);padding:44px 36px;box-shadow:var(--shadow-soft);}
+.login-mark{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px;}
+.login-mark span:first-child{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--ember);border:1px solid var(--ember-line);padding:6px 8px;border-radius:5px;}
+.login-mark span:last-child{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:18px;text-transform:uppercase;}
+.login-card h1{font-size:26px;text-align:center;margin-bottom:6px;}
+.login-card > p{text-align:center;color:var(--smoke);font-size:13.5px;margin-bottom:28px;}
+.field{margin-bottom:16px;}
+.field label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--smoke-dim);display:block;margin-bottom:7px;}
+.field input,.field textarea,.field select{width:100%;background:var(--ink-raised-2);border:1px solid var(--ink-line-strong);border-radius:var(--radius-s);padding:12px 14px;color:var(--paper);font-size:14.5px;transition:border-color 0.25s;}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--ember-line);}
+.field textarea{resize:vertical;min-height:80px;}
+#loginError{color:var(--red);font-size:13px;margin-top:4px;min-height:18px;}
+.login-note{margin-top:24px;padding-top:20px;border-top:1px solid var(--ink-line);font-size:12px;color:var(--smoke-dim);line-height:1.6;}
+
+/* ---------- DASHBOARD ---------- */
+#dashboard{display:none;min-height:100vh;position:relative;z-index:1;}
+.admin-header{position:sticky;top:0;z-index:50;background:rgba(12,11,9,0.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line);padding:16px 0;}
+.admin-header .wrap{max-width:1180px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.admin-logo{display:flex;align-items:center;gap:10px;}
+.admin-logo span:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ember);border:1px solid var(--ember-line);padding:5px 7px;border-radius:5px;}
+.admin-logo span:last-child{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:16px;text-transform:uppercase;}
+.admin-tabs{display:flex;gap:6px;background:var(--ink-raised);border:1px solid var(--ink-line);border-radius:999px;padding:4px;}
+.admin-tab{padding:9px 20px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--smoke);background:none;border:none;transition:background 0.25s,color 0.25s;}
+.admin-tab.active{background:var(--ember-dim);color:var(--ember);}
+.admin-actions{display:flex;gap:10px;align-items:center;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+.admin-body{padding:44px 0 100px;}
+.panel-head{margin-bottom:32px;}
+.panel-head h2{font-size:30px;margin-top:8px;}
+.panel-head p{color:var(--smoke);font-size:14.5px;margin-top:8px;max-width:56ch;}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink-raised-2);border:1px solid var(--ember-line);border-radius:999px;padding:13px 24px;font-size:13.5px;box-shadow:var(--shadow-soft);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.35s var(--ease),transform 0.35s var(--ease);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* text tab */
+.text-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;}
+.text-grid .field.full{grid-column:1/-1;}
+@media (max-width:700px){.text-grid{grid-template-columns:1fr;}}
+
+/* video tab */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;}
+.vcard{background:var(--ink-raised);border:1px solid var(--ink-line);border-radius:var(--radius-m);overflow:hidden;position:relative;}
+.vcard.dragover{border-color:var(--ember);box-shadow:0 0 0 3px var(--ember-dim);}
+.vcard .thumb{position:relative;aspect-ratio:9/16;background:#000;overflow:hidden;}
+.vcard .thumb img,.vcard .thumb video{width:100%;height:100%;object-fit:cover;}
+.vcard .delbtn{
+  position:absolute;top:10px;right:10px;z-index:5;width:30px;height:30px;border-radius:50%;
+  background:rgba(12,11,9,0.75);border:1px solid rgba(209,80,58,0.5);color:#f0b3a5;
+  display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;
+  backdrop-filter:blur(6px);transition:background 0.2s,transform 0.2s;
+}
+.vcard .delbtn:hover{background:var(--red);color:#fff;transform:scale(1.08);}
+.vcard .mainbadge{position:absolute;top:10px;left:10px;z-index:5;background:var(--ember);color:#141110;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:5px 9px;border-radius:999px;}
+.vcard .drop-hint{
+  position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  background:rgba(12,11,9,0.55);opacity:0;transition:opacity 0.25s;color:var(--paper-dim);font-size:12.5px;text-align:center;padding:16px;
+  pointer-events:none;
+}
+.vcard .thumb:hover .drop-hint,.vcard.dragover .drop-hint{opacity:1;}
+.vcard .drop-hint svg{width:26px;height:26px;stroke:var(--ember);fill:none;}
+.vcard .fields{padding:16px;}
+.vcard .fields .field{margin-bottom:10px;}
+.vcard .fields .field label{font-size:10px;margin-bottom:5px;}
+.vcard .fields .field input,.vcard .fields .field textarea{padding:9px 11px;font-size:13px;}
+.vcard .fields .field textarea{min-height:50px;}
+.vcard .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.vcard .card-actions{display:flex;gap:8px;padding:0 16px 16px;}
+.vcard .card-actions .btn{flex:1;justify-content:center;padding:9px 10px;font-size:12.5px;}
+
+.add-slot{
+  border:1.5px dashed var(--ink-line-strong);border-radius:var(--radius-m);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  min-height:280px;color:var(--smoke);transition:border-color 0.25s,color 0.25s,background 0.25s;
+  background:none;
+}
+.add-slot:hover{border-color:var(--ember-line);color:var(--ember);background:var(--ember-dim);}
+.add-slot svg{width:30px;height:30px;stroke:currentColor;fill:none;}
+
+.gh-panel{background:var(--ink-raised);border:1px solid var(--ink-line);border-radius:var(--radius-m);padding:24px 26px;margin-bottom:28px;}
+.booking-section{margin-top:36px;}
+.booking-heading{font-size:18px;margin-bottom:16px;}
+.booking-list{display:flex;flex-direction:column;gap:12px;}
+.booking-empty{color:var(--smoke);font-size:14px;}
+.booking-card{background:var(--ink-raised);border:1px solid var(--ink-line);border-radius:var(--radius-m);padding:18px 20px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start;}
+.booking-card .booking-main{flex:1;min-width:220px;}
+.booking-card .booking-main strong{color:var(--paper);font-size:15px;}
+.booking-card .booking-meta{color:var(--smoke);font-size:13px;margin-top:4px;line-height:1.6;}
+.booking-card .booking-notes{color:var(--paper-dim);font-size:13.5px;margin-top:8px;max-width:60ch;}
+.booking-card select{background:var(--ink-raised-2);border:1px solid var(--ink-line-strong);border-radius:var(--radius-s);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 12px;}
+.gh-panel h3{font-size:18px;margin-top:8px;}
+.gh-status{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-left:10px;vertical-align:middle;}
+.gh-status.on{background:var(--ember-dim);color:var(--ember);}
+.gh-status.off{background:var(--ink-line);color:var(--smoke);}
+
+.videos-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:14px;}
+.hidden-input{display:none;}
+
+.footer-note{margin-top:56px;padding-top:24px;border-top:1px solid var(--ink-line);font-size:12px;color:var(--smoke-dim);line-height:1.7;max-width:70ch;}
+.footer-note strong{color:var(--smoke);}
+
+@media (max-width:640px){
+  .admin-header .wrap{flex-direction:column;align-items:stretch;}
+  .admin-tabs{width:100%;}
+  .admin-tab{flex:1;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-mark"><span>ZW</span><span>Ziad Wael</span></div>
+    <h1>Admin Access</h1>
+    <p>Sign in to manage site content.</p>
+    <form id="loginForm">
+      <div class="field"><label>Username</label><input type="text" id="loginUser" autocomplete="username" required></div>
+      <div class="field"><label>Password</label><input type="password" id="loginPass" autocomplete="current-password" required></div>
+      <div id="loginError"></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px;">Log In →</button>
+    </form>
+    <div class="login-note">
+      This is a basic client-side lock, not real security — the password lives in this page's code, so anyone technical can view-source or open dev tools and get past it. Fine for keeping casual visitors out; don't rely on it for anything sensitive.
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard">
+  <header class="admin-header">
+    <div class="wrap">
+      <div class="admin-logo"><span>ZW</span><span>Admin</span></div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="text">Site Text</button>
+        <button class="admin-tab" data-tab="videos">Videos</button>
+        <button class="admin-tab" data-tab="bookings">Bookings</button>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" target="_blank" class="btn btn-ghost btn-sm">View Live Preview</a>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-body wrap">
+
+    <!-- ---- TEXT TAB ---- -->
+    <section id="tabText">
+      <div class="panel-head">
+        <div class="eyebrow"><span class="dot"></span>Site Text</div>
+        <h2>Edit the copy</h2>
+        <p>These map directly onto the homepage. Changes save to this browser instantly; use Publish Changes (top of the Videos tab) when you're ready to make them live for real visitors.</p>
+      </div>
+      <div class="text-grid">
+        <div class="field full"><label>Hero Headline</label><input type="text" id="txt_heroHeadline"></div>
+        <div class="field full"><label>Hero Subheading</label><textarea id="txt_heroSub"></textarea></div>
+        <div class="field full"><label>About Headline</label><input type="text" id="txt_aboutHeadline"></div>
+        <div class="field full"><label>About Bio</label><textarea id="txt_aboutBio" style="min-height:220px;"></textarea></div>
+        <div class="field"><label>Content Types</label><input type="text" id="txt_factContentTypes"></div>
+      </div>
+      <button class="btn btn-primary" id="saveTextBtn" style="margin-top:8px;">Save Text</button>
+    </section>
+
+    <!-- ---- VIDEOS TAB ---- -->
+    <section id="tabVideos" style="display:none;">
+      <div class="panel-head">
+        <div class="eyebrow"><span class="dot"></span>Videos</div>
+        <h2>Manage the reel</h2>
+        <p>Drag a video onto any thumbnail to replace it — a poster frame is grabbed automatically. Use the star button to set a card as the homepage reel. Delete removes a card from the grid (it doesn't touch the original file on disk).</p>
+      </div>
+      <div class="gh-panel">
+        <div class="eyebrow"><span class="dot"></span>Publish Destination <span class="gh-status off" id="ghStatusBadge">Not connected</span></div>
+        <h3>Publish straight to GitHub</h3>
+        <p style="color:var(--smoke);font-size:13.5px;margin-top:6px;max-width:62ch;">
+          Fill this in once and <strong>Publish Changes</strong> will push updates directly into your GitHub repo — GitHub Pages picks them up and rebuilds automatically, usually within a minute or two. Leave it empty and Publish Changes will just download a zip for you to upload by hand instead.
+        </p>
+        <div class="text-grid" style="margin-top:18px;max-width:760px;">
+          <div class="field"><label>GitHub Username / Org</label><input type="text" id="gh_owner" placeholder="e.g. ziadwael" autocomplete="off"></div>
+          <div class="field"><label>Repository Name</label><input type="text" id="gh_repo" placeholder="e.g. ziadwael.github.io" autocomplete="off"></div>
+          <div class="field"><label>Branch</label><input type="text" id="gh_branch" placeholder="main" autocomplete="off"></div>
+          <div class="field"><label>Personal Access Token</label><input type="password" id="gh_token" placeholder="github_pat_…" autocomplete="off"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+          <button class="btn btn-ghost btn-sm" id="saveGhBtn">Save GitHub Settings</button>
+          <button class="btn btn-ghost btn-sm" id="clearGhBtn">Disconnect</button>
+        </div>
+        <div class="footer-note" style="margin-top:20px;">
+          <strong>Creating a token:</strong> on GitHub go to Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token. Set "Repository access" to <strong>Only select repositories</strong> and pick this repo, then under Permissions set <strong>Contents</strong> to <strong>Read and write</strong>. Paste the token above — it's stored only in this browser (localStorage) and sent only to GitHub's API, never anywhere else. Don't do this on a shared or public computer, and you can revoke the token any time from that same GitHub settings page.
+        </div>
+      </div>
+
+      <div class="videos-toolbar">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" id="publishBtn">⬆ Publish Changes</button>
+          <button class="btn btn-ghost btn-sm" id="downloadZipBtn">Download Zip Instead</button>
+          <button class="btn btn-ghost btn-sm" id="saveVideosBtn">Save Draft</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="resetBtn">Reset to Defaults</button>
+      </div>
+      <div class="video-grid" id="videoGrid"></div>
+
+      <div class="footer-note">
+        <strong>How publishing works:</strong> everything you do here saves to this browser only (localStorage + IndexedDB), so you can preview changes safely — a visitor on another device won't see them. <strong>Publish Changes</strong> either pushes straight to GitHub (if Publish Destination above is filled in) or downloads an update package for you to upload manually — see <span class="mono">README.txt</span> inside it for exact steps either way.
+      </div>
+    </section>
+
+    <!-- ---- BOOKINGS TAB ---- -->
+    <section id="tabBookings" style="display:none;">
+      <div class="panel-head">
+        <div class="eyebrow"><span class="dot"></span>Bookings</div>
+        <h2>Scheduled calls</h2>
+        <p>Requests submitted from the Schedule page land here once your backend is connected below. Change a status any time — it saves immediately, no publish needed.</p>
+      </div>
+
+      <div class="gh-panel">
+        <div class="eyebrow"><span class="dot"></span>Bookings Backend <span class="gh-status off" id="bookingStatusBadge">Not connected</span></div>
+        <h3>Connect your Google Sheet</h3>
+        <p style="color:var(--smoke);font-size:13.5px;margin-top:6px;max-width:62ch;">
+          Requests get stored in a Google Sheet through a small free script. Once connected here, also click <strong>Publish Changes</strong> (Videos tab) so the Contact page itself knows where to send new requests.
+        </p>
+        <div class="text-grid" style="margin-top:18px;max-width:760px;">
+          <div class="field full"><label>Apps Script Web App URL</label><input type="text" id="bk_endpoint" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></div>
+          <div class="field full"><label>Secret Key</label><input type="password" id="bk_secret" placeholder="the SECRET value from your script" autocomplete="off"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+          <button class="btn btn-ghost btn-sm" id="saveBookingBtn">Save Backend Settings</button>
+          <button class="btn btn-ghost btn-sm" id="clearBookingBtn">Disconnect</button>
+          <button class="btn btn-ghost btn-sm" id="refreshBookingsBtn">↻ Refresh</button>
+        </div>
+        <div class="footer-note" style="margin-top:20px;">
+          <strong>One-time setup:</strong> paste the script I gave you into a Google Sheet → Extensions → Apps Script, then Deploy → New deployment → Web app → Execute as <strong>Me</strong> → Who has access: <strong>Anyone</strong>. Paste the deployment URL above, and the <span class="mono">SECRET</span> value you chose inside the script into the Secret Key field.
+        </div>
+      </div>
+
+      <div class="booking-section">
+        <h3 class="booking-heading">Scheduled Calls</h3>
+        <div id="bookingsList" class="booking-list"><p class="booking-empty">Connect your backend above, then hit Refresh.</p></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<input type="file" id="fileInput" class="hidden-input" accept="video/*">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* ================= AUTH ================= */
+const ADMIN_USER = 'Ziad-Wael';
+const ADMIN_PASS = '123456789';
+
+const loginScreen = document.getElementById('loginScreen');
+const dashboard = document.getElementById('dashboard');
+
+function showDashboard(){
+  loginScreen.style.display = 'none';
+  dashboard.style.display = 'block';
+  initDashboard();
+}
+
+if(sessionStorage.getItem('zw_admin_ok') === '1'){
+  showDashboard();
+}
+
+document.getElementById('loginForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(u === ADMIN_USER && p === ADMIN_PASS){
+    sessionStorage.setItem('zw_admin_ok','1');
+    showDashboard();
+  } else {
+    document.getElementById('loginError').textContent = 'Incorrect username or password.';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  sessionStorage.removeItem('zw_admin_ok');
+  location.reload();
+});
+
+/* ================= SHARED DATA LAYER (mirrors index.html) ================= */
+const ZW_DB = 'ZWStudioDB', ZW_STORE = 'media';
+function idbOpen(){
+  return new Promise((resolve,reject)=>{
+    const req = indexedDB.open(ZW_DB, 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore(ZW_STORE); };
+    req.onsuccess = ()=> resolve(req.result);
+    req.onerror = ()=> reject(req.error);
+  });
+}
+async function idbGet(key){
+  try{
+    const db = await idbOpen();
+    return await new Promise((resolve,reject)=>{
+      const tx = db.transaction(ZW_STORE,'readonly');
+      const req = tx.objectStore(ZW_STORE).get(key);
+      req.onsuccess = ()=> resolve(req.result || null);
+      req.onerror = ()=> reject(req.error);
+    });
+  }catch(e){ return null; }
+}
+async function idbSet(key, blob){
+  const db = await idbOpen();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(ZW_STORE,'readwrite');
+    tx.objectStore(ZW_STORE).put(blob, key);
+    tx.oncomplete = ()=> resolve(true);
+    tx.onerror = ()=> reject(tx.error);
+  });
+}
+async function idbDel(key){
+  const db = await idbOpen();
+  return new Promise((resolve)=>{
+    const tx = db.transaction(ZW_STORE,'readwrite');
+    tx.objectStore(ZW_STORE).delete(key);
+    tx.oncomplete = ()=> resolve(true);
+    tx.onerror = ()=> resolve(false);
+  });
+}
+async function zwResolve(ref, fallback){
+  if(!ref) return fallback;
+  if(ref.startsWith('idb:')){
+    const blob = await idbGet(ref.slice(4));
+    return blob ? URL.createObjectURL(blob) : fallback;
+  }
+  return ref;
+}
+/* admin.html now lives at the site root alongside index.html, so plain (non-idb)
+   refs like 'posters/x.jpg' resolve correctly with no path prefix needed. */
+async function adminDisplayUrl(ref, fallback){
+  if(!ref) return fallback;
+  if(ref.startsWith('idb:')) return zwResolve(ref, fallback);
+  return ref;
+}
+
+const defaultProjects = [
+  { id:'m1', cat:'Sponsored Ad · Instagram', title:'The Zest Agency', duration:'0:35', views:'142K',
+    overview:"A paid Instagram ad, not an organic post — built with kinetic type and a confident visual rhythm to earn a stop mid-scroll.",
+    goal:"Make a sponsored ad that doesn't feel like one, and drive real inbound inquiries.",
+    approach:"Fast rhythmic cuts, bold type call-outs, and a restrained palette broken by one red accent for silent-autoplay legibility.",
+    result:"142K views and a wave of DMs asking about pricing and packages — the ad worked.",
+    desc:"Paid Instagram ad that drove real DMs.",
+    tags:['Paid Ad','Motion Graphics','Business'],
+    poster:'posters/the-zest-agency.jpg', video:'videos/the-zest-agency.webm' },
+  { id:'m2', cat:'Personal Brand · Healthcare', title:'Dr. Ahmed — Dermatology & Cosmetics', duration:'0:46', views:'89K*',
+    overview:"A direct-to-camera piece helping a dermatology and laser specialist earn trust before a patient ever books.",
+    goal:"Turn expertise into approachable, caption-led content that makes the doctor the obvious choice.",
+    approach:"Clean punch-ins on a single-take talking head, timed caption call-outs, and a soft grade matched to the real clinic.",
+    result:"An estimated ~89K views for a specialty that lives on trust — reach that converts to bookings.",
+    desc:"Talking-head content built to earn patient trust.",
+    tags:['Personal Brand','Short Form','Healthcare'],
+    poster:'posters/dr-ahmed-dermatology.jpg', video:'videos/dr-ahmed-dermatology.webm' },
+  { id:'m3', cat:'Motion & Visuals · Social Media', title:'What The World Chases', duration:'0:50', views:'216K*',
+    overview:"A fully animated kinetic-typography piece pairing 3D elements with hand-built motion type.",
+    goal:"Show range beyond talking-head editing — 3D, motion, and sound design as one standalone piece.",
+    approach:"Custom 3D renders choreographed to a rising voiceover, warm marble backdrops, and frame-by-frame type animation.",
+    result:"An estimated ~216K views — production value that travels well past one platform.",
+    desc:"3D elements and kinetic type, frame by frame.",
+    tags:['Motion Graphics','VFX','Kinetic Typography'],
+    poster:'posters/motion-reel.jpg', video:'videos/motion-reel.webm' },
+  { id:'m4', cat:'Personal Brand · Motion Graphics', title:'Script Framework', duration:'0:19', views:'64K*',
+    overview:"A self-promo reel offering a free script framework — the hook, the offer, and the payoff in under 20 seconds.",
+    goal:"Turn a scroll-stopping hook into saves, follows, and DM requests for the framework.",
+    approach:"Clapperboard motifs, paper-prop stop motion, and tight kinetic type keep the pace brisk and premium.",
+    result:"An estimated ~64K views — solid reach for a pure lead-magnet format.",
+    desc:"A self-promo hook built to earn saves and follows.",
+    tags:['Motion Graphics','Personal Brand','Hook Writing'],
+    poster:'posters/script-framework.jpg', video:'videos/script-framework.webm' },
+  { id:'m5', cat:'Business · Storytelling', title:'The Nvidia Story', duration:'0:39', views:'184K*',
+    overview:"A gallery-style explainer on Nvidia's rise from a gaming-chip company to a $140B giant.",
+    goal:"Make a dense business story easy to follow and satisfying to finish.",
+    approach:"An animated gallery-wall motif, bold caption typography, and pacing that matches each new fact beat.",
+    result:"An estimated ~184K views — business storytelling that holds attention to the end.",
+    desc:"A gallery-style explainer on a $140B rise.",
+    tags:['Business','Motion Graphics','Educational'],
+    poster:'posters/nvidia-story.jpg', video:'videos/nvidia-story.webm' },
+  { id:'m6', cat:'Motion & Visuals · Personal Brand', title:'Why Brands Stick', duration:'0:14', views:'127K*',
+    overview:"A quick kinetic-type piece on why certain brands stay memorable — motion design as the answer.",
+    goal:"Make the case for motion design itself, fast enough to hold on a first watch.",
+    approach:"Bold brand callouts, a clean type-driven mid-section, and a playful closing visual metaphor.",
+    result:"An estimated ~127K views — proof a 14-second idea can still land.",
+    desc:"Kinetic type on what makes branding memorable.",
+    tags:['Motion Graphics','Branding','Kinetic Typography'],
+    poster:'posters/why-brands-stick.jpg', video:'videos/why-brands-stick.webm' }
+];
+
+const defaultText = {
+  heroHeadline:"I Turn Raw Footage Into Content People <span class=\"accent\">Actually Watch.</span>",
+  heroSub:"High-retention video editing for creators and businesses that want better content, stronger storytelling, and more attention.",
+  aboutHeadline:"I'm Ziad Wael.",
+  aboutBio:"I'm a professional video editor focused on turning raw footage into content that captures attention and keeps viewers watching.\n\nMy approach goes beyond simply cutting clips together. I focus on pacing, storytelling, retention, sound design, visual flow, and strategic use of motion graphics to make every second of a video purposeful.\n\nWhether it's short-form content for Instagram and TikTok or long-form YouTube content, I adapt the editing style to the creator, audience, and goal of the content.\n\nI care about the details that most viewers never consciously notice — the timing of a cut, when a visual appears, how the story progresses, and how to prevent the video from feeling slow or repetitive.\n\nThe goal is simple: create videos that look professional, feel natural, and keep people watching.",
+  factContentTypes:"Short-form, long-form, motion graphics"
+};
+
+let state = { text:{}, hero:null, projects:[] };
+let dirtyVideos = false;
+
+function loadState(){
+  state.text = {...defaultText};
+  try{ const raw = localStorage.getItem('zw_text'); if(raw) state.text = {...state.text, ...JSON.parse(raw)}; }catch(e){}
+  try{ const raw = localStorage.getItem('zw_hero'); if(raw) state.hero = JSON.parse(raw); }catch(e){}
+  state.projects = defaultProjects.map(p=>({...p, tags:[...p.tags]}));
+  try{
+    const raw = localStorage.getItem('zw_projects');
+    if(raw){ const saved = JSON.parse(raw); if(Array.isArray(saved) && saved.length) state.projects = saved; }
+  }catch(e){}
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+/* ================= TABS ================= */
+document.querySelectorAll('.admin-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.getAttribute('data-tab');
+    document.getElementById('tabText').style.display = target==='text' ? 'block':'none';
+    document.getElementById('tabVideos').style.display = target==='videos' ? 'block':'none';
+    document.getElementById('tabBookings').style.display = target==='bookings' ? 'block':'none';
+    if(target==='bookings') loadBookingsData();
+  });
+});
+
+/* ================= TEXT TAB ================= */
+function renderTextTab(){
+  document.getElementById('txt_heroHeadline').value = state.text.heroHeadline.replace(/<span[^>]*>|<\/span>/g,'');
+  document.getElementById('txt_heroSub').value = state.text.heroSub;
+  document.getElementById('txt_aboutHeadline').value = state.text.aboutHeadline;
+  document.getElementById('txt_aboutBio').value = state.text.aboutBio.replace(/<\/?strong>/g,'');
+  document.getElementById('txt_factContentTypes').value = state.text.factContentTypes;
+}
+document.getElementById('saveTextBtn').addEventListener('click', ()=>{
+  state.text.heroHeadline = document.getElementById('txt_heroHeadline').value;
+  state.text.heroSub = document.getElementById('txt_heroSub').value;
+  state.text.aboutHeadline = document.getElementById('txt_aboutHeadline').value;
+  state.text.aboutBio = document.getElementById('txt_aboutBio').value;
+  state.text.factContentTypes = document.getElementById('txt_factContentTypes').value;
+  localStorage.setItem('zw_text', JSON.stringify(state.text));
+  showToast('Text saved — open View Live Preview to see it.');
+});
+
+/* ================= VIDEOS TAB ================= */
+let activeUploadIdx = null;
+
+async function renderVideosTab(){
+  const grid = document.getElementById('videoGrid');
+  const cards = await Promise.all(state.projects.map(async (p, i)=>{
+    const posterUrl = await adminDisplayUrl(p.poster, '');
+    const isMain = state.hero && state.hero.video === p.video;
+    return `
+      <div class="vcard" data-idx="${i}">
+        <div class="thumb">
+          ${isMain ? '<span class="mainbadge">★ Homepage</span>' : ''}
+          <button class="delbtn" data-action="delete" data-idx="${i}" title="Delete">&times;</button>
+          <img src="${posterUrl}" alt="">
+          <div class="drop-hint">
+            <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+            Drop a video to replace
+          </div>
+        </div>
+        <div class="fields">
+          <div class="field"><label>Title</label><input type="text" data-f="title" data-idx="${i}" value="${escapeAttr(p.title)}"></div>
+          <div class="field"><label>Category</label><input type="text" data-f="cat" data-idx="${i}" value="${escapeAttr(p.cat)}"></div>
+          <div class="field"><label>Short Description</label><textarea data-f="desc" data-idx="${i}">${escapeHtml(p.desc)}</textarea></div>
+          <div class="row2">
+            <div class="field"><label>Duration</label><input type="text" data-f="duration" data-idx="${i}" value="${escapeAttr(p.duration)}"></div>
+            <div class="field"><label>Views</label><input type="text" data-f="views" data-idx="${i}" value="${escapeAttr(p.views)}"></div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-ghost" data-action="setmain" data-idx="${i}">${isMain ? '★ Homepage Video' : 'Set as Homepage'}</button>
+        </div>
+      </div>
+    `;
+  }));
+
+  grid.innerHTML = cards.join('') + `
+    <button class="add-slot" id="addSlotBtn">
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>
+      Add Video Slot
+    </button>
+  `;
+
+  grid.querySelectorAll('[data-action="delete"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const idx = Number(btn.getAttribute('data-idx'));
+      if(confirm('Remove this video from the grid?')){
+        state.projects.splice(idx,1);
+        dirtyVideos = true;
+        renderVideosTab();
+      }
+    });
+  });
+  grid.querySelectorAll('[data-action="setmain"]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = Number(btn.getAttribute('data-idx'));
+      const p = state.projects[idx];
+      state.hero = { video:p.video, poster:p.poster, views:p.views, duration:p.duration };
+      localStorage.setItem('zw_hero', JSON.stringify(state.hero));
+      dirtyVideos = true;
+      renderVideosTab();
+      showToast(`"${p.title}" set as homepage video.`);
+    });
+  });
+  grid.querySelectorAll('[data-f]').forEach(input=>{
+    input.addEventListener('input', ()=>{
+      const idx = Number(input.getAttribute('data-idx'));
+      const f = input.getAttribute('data-f');
+      state.projects[idx][f] = input.value;
+      dirtyVideos = true;
+    });
+  });
+  grid.querySelectorAll('.vcard').forEach(card=>{
+    const idx = Number(card.getAttribute('data-idx'));
+    ['dragenter','dragover'].forEach(evt=> card.addEventListener(evt, (e)=>{ e.preventDefault(); card.classList.add('dragover'); }));
+    ['dragleave','drop'].forEach(evt=> card.addEventListener(evt, (e)=>{ e.preventDefault(); card.classList.remove('dragover'); }));
+    card.addEventListener('drop', (e)=>{
+      const file = e.dataTransfer.files[0];
+      if(file && file.type.startsWith('video/')) handleVideoFile(idx, file);
+    });
+    card.querySelector('.thumb').addEventListener('click', (e)=>{
+      if(e.target.closest('.delbtn')) return;
+      activeUploadIdx = idx;
+      document.getElementById('fileInput').click();
+    });
+  });
+
+  document.getElementById('addSlotBtn').addEventListener('click', ()=>{
+    state.projects.push({
+      id:'custom-'+Date.now(), cat:'Category', title:'New Project', duration:'0:00', views:'0',
+      overview:'', goal:'', approach:'', result:'',
+      desc:'Short one-line description.', tags:[],
+      poster:'', video:''
+    });
+    dirtyVideos = true;
+    renderVideosTab();
+  });
+}
+
+document.getElementById('fileInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(file && activeUploadIdx !== null) handleVideoFile(activeUploadIdx, file);
+  e.target.value = '';
+});
+
+function generatePosterFromVideo(file){
+  return new Promise((resolve)=>{
+    let settled = false;
+    const done = (val)=>{ if(!settled){ settled = true; resolve(val); } };
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.src = url; v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.addEventListener('loadeddata', ()=>{ v.currentTime = Math.min(1, (v.duration||2)/4); });
+    v.addEventListener('seeked', ()=>{
+      const canvas = document.createElement('canvas');
+      canvas.width = v.videoWidth || 540; canvas.height = v.videoHeight || 960;
+      canvas.getContext('2d').drawImage(v,0,0,canvas.width,canvas.height);
+      canvas.toBlob((blob)=>{ URL.revokeObjectURL(url); done(blob); }, 'image/jpeg', 0.87);
+    });
+    v.addEventListener('error', ()=>{ URL.revokeObjectURL(url); done(null); });
+    setTimeout(()=>{ URL.revokeObjectURL(url); done(null); }, 8000); // safety net: never hang the upload on an unusual file
+  });
+}
+
+async function handleVideoFile(idx, file){
+  showToast('Uploading video…');
+  const key = 'vid-' + Date.now();
+  await idbSet(key, file);
+  const posterBlob = await generatePosterFromVideo(file);
+  let posterKey = null;
+  if(posterBlob){ posterKey = 'poster-' + Date.now(); await idbSet(posterKey, posterBlob); }
+  state.projects[idx].video = 'idb:' + key;
+  if(posterKey) state.projects[idx].poster = 'idb:' + posterKey;
+  dirtyVideos = true;
+  renderVideosTab();
+  showToast('Video added — fill in the details, then Save Draft.');
+}
+
+function escapeHtml(s){ return (s||'').replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escapeAttr(s){ return escapeHtml(s).replace(/"/g,'&quot;'); }
+
+document.getElementById('saveVideosBtn').addEventListener('click', ()=>{
+  localStorage.setItem('zw_projects', JSON.stringify(state.projects));
+  dirtyVideos = false;
+  showToast('Draft saved to this browser.');
+});
+
+document.getElementById('resetBtn').addEventListener('click', async ()=>{
+  if(!confirm('Reset all text and video edits back to the original defaults? This clears everything saved in this browser.')) return;
+  localStorage.removeItem('zw_text');
+  localStorage.removeItem('zw_hero');
+  localStorage.removeItem('zw_projects');
+  indexedDB.deleteDatabase(ZW_DB);
+  loadState();
+  renderTextTab();
+  await renderVideosTab();
+  showToast('Reset to defaults.');
+});
+
+/* ================= PUBLISH — shared file builder ================= */
+/* Walks state.projects/state.hero, pulls any IndexedDB-backed blobs out,
+   and returns the flat list of files a publish needs to write: zw-overrides.json
+   plus any new video/poster files. Used by BOTH the GitHub path and the zip path
+   so they can never drift out of sync with each other. */
+async function buildPublishFiles(){
+  const files = [];
+  const exportedProjects = [];
+  for(const p of state.projects){
+    const copy = {...p};
+    if(p.video && p.video.startsWith('idb:')){
+      const blob = await idbGet(p.video.slice(4));
+      if(blob){
+        const ext = (blob.type && blob.type.includes('mp4')) ? 'mp4' : (blob.type.includes('quicktime') ? 'mov' : 'webm');
+        const fname = `${p.id}-${Date.now()}.${ext}`;
+        files.push({ path: 'videos/' + fname, blob });
+        copy.video = 'videos/' + fname;
+      }
+    }
+    if(p.poster && p.poster.startsWith('idb:')){
+      const blob = await idbGet(p.poster.slice(4));
+      if(blob){
+        const fname = `${p.id}-${Date.now()}.jpg`;
+        files.push({ path: 'posters/' + fname, blob });
+        copy.poster = 'posters/' + fname;
+      }
+    }
+    exportedProjects.push(copy);
+  }
+  let exportedHero = state.hero;
+  if(exportedHero && state.hero.video && state.hero.video.startsWith('idb:')){
+    const srcIdx = state.projects.findIndex(p => p.video === state.hero.video);
+    if(srcIdx > -1){
+      exportedHero = {...state.hero, video: exportedProjects[srcIdx].video, poster: exportedProjects[srcIdx].poster};
+    }
+  }
+  const bkSettings = loadBookingSettings();
+  const overrides = { text: state.text, hero: exportedHero, projects: exportedProjects, booking: { endpoint: (bkSettings && bkSettings.endpoint) || '' } };
+  files.push({ path: 'zw-overrides.json', text: JSON.stringify(overrides, null, 2) });
+  return files;
+}
+
+/* ================= PUBLISH — download a zip (manual upload) ================= */
+async function downloadZipPackage(){
+  if(typeof JSZip === 'undefined'){
+    showToast('Could not reach the zip library (cdnjs.cloudflare.com) — check your internet connection and try again.');
+    return;
+  }
+  try{
+    showToast('Building update package…');
+    localStorage.setItem('zw_projects', JSON.stringify(state.projects));
+    const files = await buildPublishFiles();
+    const zip = new JSZip();
+    files.forEach(f=> f.blob ? zip.file(f.path, f.blob) : zip.file(f.path, f.text));
+    zip.file('README.txt',
+      'Ziad Wael site — content update package\n' +
+      '----------------------------------------\n' +
+      '1. Unzip this.\n' +
+      '2. Upload zw-overrides.json into the SAME folder as your index.html (root of the site).\n' +
+      '3. If a "videos" or "posters" folder came with this zip, upload those folders too (merge with existing ones — don\'t overwrite the whole folder).\n' +
+      '4. Done — visitors will now see the updated content. No other files need to change.\n'
+    );
+    const blob = await zip.generateAsync({type:'blob'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ziadwael-site-update.zip';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+    showToast('Update package downloaded — check your Downloads folder.');
+  }catch(err){
+    console.error(err);
+    showToast('Something went wrong building the package: ' + err.message);
+  }
+}
+
+/* ================= PUBLISH — direct to GitHub ================= */
+const GH_KEY = 'zw_gh_settings';
+function loadGhSettings(){
+  try{ const raw = localStorage.getItem(GH_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function ghConfigured(gh){ return !!(gh && gh.owner && gh.repo && gh.token); }
+function refreshGhStatusBadge(){
+  const gh = loadGhSettings();
+  const badge = document.getElementById('ghStatusBadge');
+  if(ghConfigured(gh)){ badge.textContent = `Connected · ${gh.owner}/${gh.repo}`; badge.className = 'gh-status on'; }
+  else{ badge.textContent = 'Not connected'; badge.className = 'gh-status off'; }
+}
+function populateGhFields(){
+  const gh = loadGhSettings() || {};
+  document.getElementById('gh_owner').value = gh.owner || '';
+  document.getElementById('gh_repo').value = gh.repo || '';
+  document.getElementById('gh_branch').value = gh.branch || '';
+  document.getElementById('gh_token').value = gh.token || '';
+  refreshGhStatusBadge();
+}
+document.getElementById('saveGhBtn').addEventListener('click', ()=>{
+  const gh = {
+    owner: document.getElementById('gh_owner').value.trim(),
+    repo: document.getElementById('gh_repo').value.trim(),
+    branch: document.getElementById('gh_branch').value.trim() || 'main',
+    token: document.getElementById('gh_token').value.trim()
+  };
+  if(!gh.owner || !gh.repo || !gh.token){
+    showToast('Fill in owner, repo, and token to connect GitHub.');
+    return;
+  }
+  localStorage.setItem(GH_KEY, JSON.stringify(gh));
+  refreshGhStatusBadge();
+  showToast('GitHub settings saved — Publish Changes will push here now.');
+});
+document.getElementById('clearGhBtn').addEventListener('click', ()=>{
+  localStorage.removeItem(GH_KEY);
+  document.getElementById('gh_owner').value = '';
+  document.getElementById('gh_repo').value = '';
+  document.getElementById('gh_branch').value = '';
+  document.getElementById('gh_token').value = '';
+  refreshGhStatusBadge();
+  showToast('Disconnected — Publish Changes will download a zip instead.');
+});
+
+function blobToBase64(blob){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onloadend = ()=> resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+function textToBase64(text){ return btoa(unescape(encodeURIComponent(text))); }
+
+function ghEncodePath(path){ return path.split('/').map(encodeURIComponent).join('/'); }
+async function ghGetSha(gh, path){
+  const res = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${ghEncodePath(path)}?ref=${encodeURIComponent(gh.branch)}`, {
+    headers: { 'Authorization': `Bearer ${gh.token}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if(res.status === 200){ const data = await res.json(); return data.sha; }
+  if(res.status === 404) return null;
+  if(res.status === 401) throw new Error('GitHub rejected the token — check it\'s correct and has Contents: Read and write on this repo.');
+  const err = await res.json().catch(()=>({}));
+  throw new Error(`Checking ${path} failed (${res.status}): ${err.message || 'unknown error'}`);
+}
+async function ghPutFile(gh, path, base64content, sha){
+  const body = { message: `Update ${path} via ZW Admin`, content: base64content, branch: gh.branch };
+  if(sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${ghEncodePath(path)}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${gh.token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(`Uploading ${path} failed (${res.status}): ${err.message || 'unknown error'}`);
+  }
+}
+async function publishToGithub(gh){
+  try{
+    localStorage.setItem('zw_projects', JSON.stringify(state.projects));
+    const files = await buildPublishFiles();
+    for(let i=0;i<files.length;i++){
+      const f = files[i];
+      showToast(`Publishing to GitHub… (${i+1}/${files.length}) ${f.path}`);
+      const content64 = f.blob ? await blobToBase64(f.blob) : textToBase64(f.text);
+      const sha = await ghGetSha(gh, f.path);
+      await ghPutFile(gh, f.path, content64, sha);
+    }
+    showToast(`Published to ${gh.owner}/${gh.repo} — live on GitHub Pages in a minute or two.`);
+  }catch(err){
+    console.error(err);
+    showToast('GitHub publish failed: ' + err.message);
+  }
+}
+
+document.getElementById('publishBtn').addEventListener('click', async ()=>{
+  const gh = loadGhSettings();
+  if(ghConfigured(gh)){
+    showToast('Publishing to GitHub…');
+    await publishToGithub(gh);
+  } else {
+    await downloadZipPackage();
+  }
+});
+document.getElementById('downloadZipBtn').addEventListener('click', downloadZipPackage);
+
+/* ================= BOOKINGS ================= */
+const BK_KEY = 'zw_booking_settings';
+function loadBookingSettings(){
+  try{ const raw = localStorage.getItem(BK_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function bookingConfigured(bk){ return !!(bk && bk.endpoint && bk.secret); }
+function refreshBookingStatusBadge(){
+  const bk = loadBookingSettings();
+  const badge = document.getElementById('bookingStatusBadge');
+  if(bookingConfigured(bk)){ badge.textContent = 'Connected'; badge.className = 'gh-status on'; }
+  else{ badge.textContent = 'Not connected'; badge.className = 'gh-status off'; }
+}
+function populateBookingFields(){
+  const bk = loadBookingSettings() || {};
+  document.getElementById('bk_endpoint').value = bk.endpoint || '';
+  document.getElementById('bk_secret').value = bk.secret || '';
+  refreshBookingStatusBadge();
+}
+document.getElementById('saveBookingBtn').addEventListener('click', ()=>{
+  const bk = {
+    endpoint: document.getElementById('bk_endpoint').value.trim(),
+    secret: document.getElementById('bk_secret').value.trim()
+  };
+  if(!bk.endpoint || !bk.secret){
+    showToast('Fill in both the Web App URL and Secret Key to connect.');
+    return;
+  }
+  localStorage.setItem(BK_KEY, JSON.stringify(bk));
+  refreshBookingStatusBadge();
+  showToast('Saved — click Publish Changes (Videos tab) so the site can reach it too.');
+  loadBookingsData();
+});
+document.getElementById('clearBookingBtn').addEventListener('click', ()=>{
+  localStorage.removeItem(BK_KEY);
+  document.getElementById('bk_endpoint').value = '';
+  document.getElementById('bk_secret').value = '';
+  refreshBookingStatusBadge();
+  showToast('Disconnected.');
+});
+document.getElementById('refreshBookingsBtn').addEventListener('click', loadBookingsData);
+
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtWhen(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d)) return iso;
+  return d.toLocaleString(undefined, {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'});
+}
+async function fetchBookingSheet(bk, sheetName){
+  const url = `${bk.endpoint}?secret=${encodeURIComponent(bk.secret)}&sheetName=${encodeURIComponent(sheetName)}`;
+  const res = await fetch(url);
+  const data = JSON.parse(await res.text());
+  if(!data.ok) throw new Error(data.error || 'Request failed');
+  return data.items;
+}
+async function updateBookingStatus(bk, sheetName, id, status){
+  await fetch(bk.endpoint, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action:'updateStatus', secret: bk.secret, sheetName, id, status })
+  });
+}
+function statusSelect(item, sheetName, bk){
+  const select = document.createElement('select');
+  ['new','in progress','done'].forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s.replace(/\b\w/g, c=>c.toUpperCase());
+    if((item.status || 'new') === s) opt.selected = true;
+    select.appendChild(opt);
+  });
+  select.addEventListener('change', async ()=>{
+    try{ await updateBookingStatus(bk, sheetName, item.id, select.value); showToast('Status updated.'); }
+    catch(err){ showToast('Could not update status: ' + err.message); }
+  });
+  return select;
+}
+function renderBookingCard(item, sheetName, bk, metaLine, noteText){
+  const card = document.createElement('div');
+  card.className = 'booking-card';
+  const main = document.createElement('div');
+  main.className = 'booking-main';
+  main.innerHTML = `<strong>${escapeHtml(item.name || 'Unknown')}</strong>
+    <div class="booking-meta">${escapeHtml(metaLine)}</div>
+    ${noteText ? `<div class="booking-notes">${escapeHtml(noteText)}</div>` : ''}
+    <div class="booking-meta" style="margin-top:6px;">Submitted ${fmtWhen(item.createdAt)}</div>`;
+  card.appendChild(main);
+  card.appendChild(statusSelect(item, sheetName, bk));
+  return card;
+}
+async function loadBookingsData(){
+  const bk = loadBookingSettings();
+  const bookingsList = document.getElementById('bookingsList');
+  if(!bookingConfigured(bk)){
+    bookingsList.innerHTML = '<p class="booking-empty">Connect your backend above, then hit Refresh.</p>';
+    return;
+  }
+  bookingsList.innerHTML = '<p class="booking-empty">Loading…</p>';
+  try{
+    const items = await fetchBookingSheet(bk, 'bookings');
+    bookingsList.innerHTML = '';
+    if(!items.length){ bookingsList.innerHTML = '<p class="booking-empty">No scheduled calls yet.</p>'; }
+    items.slice().reverse().forEach(item=>{
+      const meta = `${item.date || ''} · ${item.time || ''} · ${item.editingType || ''}`;
+      bookingsList.appendChild(renderBookingCard(item, 'bookings', bk, meta, item.contacts));
+    });
+  }catch(err){ bookingsList.innerHTML = `<p class="booking-empty">Couldn't load: ${escapeHtml(err.message)}</p>`; }
+}
+
+/* ================= INIT ================= */
+function initDashboard(){
+  loadState();
+  renderTextTab();
+  renderVideosTab();
+  populateGhFields();
+  populateBookingFields();
+}
+</script>
+</body>
+</html>
