@@ -7,8 +7,8 @@
     "factContentTypes": "Short-form, long-form, motion graphics"
   },
   "hero": {
-    "video": "idb:vid-1786960587211",
-    "poster": "idb:poster-1786960587377",
+    "video": "videos/m1-1787243410139.mp4",
+    "poster": "posters/m1-1787243410139.jpg",
     "views": "142K",
     "duration": "0:35"
   },
@@ -29,8 +29,8 @@
         "Motion Graphics",
         "Business"
       ],
-      "poster": "posters/m1-1787156444791.jpg",
-      "video": "videos/m1-1787156444791.mp4"
+      "poster": "posters/m1-1787243410139.jpg",
+      "video": "videos/m1-1787243410139.mp4"
     },
     {
       "id": "m2",
@@ -48,8 +48,8 @@
         "Short Form",
         "Healthcare"
       ],
-      "poster": "posters/m2-1787156444792.jpg",
-      "video": "videos/m2-1787156444792.mp4"
+      "poster": "posters/m2-1787243410140.jpg",
+      "video": "videos/m2-1787243410140.mp4"
     },
     {
       "id": "m3",
@@ -67,27 +67,8 @@
         "VFX",
         "Kinetic Typography"
       ],
-      "poster": "posters/m3-1787156444793.jpg",
-      "video": "videos/m3-1787156444792.mp4"
-    },
-    {
-      "id": "m4",
-      "cat": "Personal Brand · Motion Graphics",
-      "title": "Script Framework",
-      "duration": "0:19",
-      "views": "64K*",
-      "overview": "A self-promo reel offering a free script framework — the hook, the offer, and the payoff in under 20 seconds.",
-      "goal": "Turn a scroll-stopping hook into saves, follows, and DM requests for the framework.",
-      "approach": "Clapperboard motifs, paper-prop stop motion, and tight kinetic type keep the pace brisk and premium.",
-      "result": "An estimated ~64K views — solid reach for a pure lead-magnet format.",
-      "desc": "A self-promo hook built to earn saves and follows.",
-      "tags": [
-        "Motion Graphics",
-        "Personal Brand",
-        "Hook Writing"
-      ],
-      "poster": "posters/m4-1787156444793.jpg",
-      "video": "videos/m4-1787156444793.mp4"
+      "poster": "posters/m3-1787243410141.jpg",
+      "video": "videos/m3-1787243410140.mp4"
     },
     {
       "id": "m5",
@@ -105,27 +86,8 @@
         "Motion Graphics",
         "Educational"
       ],
-      "poster": "posters/m5-1787156444794.jpg",
-      "video": "videos/m5-1787156444793.mp4"
-    },
-    {
-      "id": "m6",
-      "cat": "Motion & Visuals · Personal Brand",
-      "title": "Why Brands Stick",
-      "duration": "0:14",
-      "views": "127K*",
-      "overview": "A quick kinetic-type piece on why certain brands stay memorable — motion design as the answer.",
-      "goal": "Make the case for motion design itself, fast enough to hold on a first watch.",
-      "approach": "Bold brand callouts, a clean type-driven mid-section, and a playful closing visual metaphor.",
-      "result": "An estimated ~127K views — proof a 14-second idea can still land.",
-      "desc": "Kinetic type on what makes branding memorable.",
-      "tags": [
-        "Motion Graphics",
-        "Branding",
-        "Kinetic Typography"
-      ],
-      "poster": "posters/m6-1787156444794.jpg",
-      "video": "videos/m6-1787156444794.mp4"
+      "poster": "posters/m5-1787243410141.jpg",
+      "video": "videos/m5-1787243410141.mp4"
     }
   ],
   "booking": {
